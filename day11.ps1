@@ -13,7 +13,7 @@ $temp = $data -split " "
 
 # Part 1  
 $buffer = new-object System.Collections.ArrayList
-$mystack = new-object System.Collections.Stack
+$myqueue = new-object System.Collections.queue
 
 for ($x = 0; $x -lt $temp.count; $x++) {
 
@@ -32,7 +32,7 @@ for ($i=0; $i -lt $buffer.count; $i++) {
   $length = $number.length
   $num = [convert]::ToInt64($number)
 
-  if ($num -eq 0) {$mystack.Push(1) }
+  if ($num -eq 0) {$myqueue.Enqueue(1) }
 
   elseif ($Length % 2 -eq 0 ) { 
   
@@ -44,28 +44,27 @@ for ($i=0; $i -lt $buffer.count; $i++) {
     $lval = [convert]::ToInt64($left)
     $rval = [convert]::toint64($right)
 
-    $mystack.push($lval)
-    $mystack.push($rval)
+    $myqueue.Enqueue($lval)
+    $myqueue.Enqueue($rval)
 
     } else  {
     $num2 = $num * 2024
-    $mystack.push($num2)
+    $myqueue.Enqueue($num2)
   }
 }
 
-$new = $mystack.toarray()
-[array]::Reverse($new)
+#$new = $myqueue.ToArray()
+#[array]::Reverse($new)
 
 #$new -join ","
-$total = $new.count
-
-$mystack.clear()
+$total = $myqueue.count
 
 $buffer.Clear()
 
-foreach ($n in $new) { [void]$buffer.Add($n) }
+while ($myqueue.count -gt 0) { [void]$buffer.Add($myqueue.Dequeue()) }
 
 $blinks +=1
+write-host $blinks
 }
 
 write-host $total
